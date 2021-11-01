@@ -2,8 +2,8 @@ from Logic.CRUD import stergeVanzare, adaugareVanzare
 
 show_menu = """
     Puteti introduce multe comenzi simultan, pe care le  separati prin ';',inclusiv la final, fiecare functia avand structura
-    Adaugare: add,id, numarul apartamentului, suma, data, tipul cheltuielii
-    Stergere: delete,id-ul cheltuielii
+    Adaugare: add,id, gen, titlu, pret, tipul reducerii
+    Stergere: delete,id-ul vanzarii
     Afisare Lista: showall
     Stop: stop
     """
