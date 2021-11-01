@@ -13,8 +13,11 @@ def adaugareVanzare(id, titlu, gen, pret, tipreducere, lista):
     '''
     if getById(id, lista) is not None:
         raise ValueError("Id-ul exista deja!")
-    vanzare = creeazaVanzare(id, titlu, gen, pret, tipreducere)
-    return lista + [vanzare]
+    elif titlu == None:
+        raise ValueError("Introduceti titlul")
+    else:
+        vanzare = creeazaVanzare(id, titlu, gen, pret, tipreducere)
+        return lista + [vanzare]
 
 
 def stergeVanzare(id, lista):
@@ -43,6 +46,12 @@ def modificaVanzare(id, titlu, gen, pret, tipreducere, lista):
     listanoua=[]
     if getById(id, lista) is None:
         raise ValueError("Nu exista o vanzare cu id-ul dat!")
+    if getById(id, lista) is False:
+        raise ValueError("Id-ul nu exista")
+    if pret < 0:
+        raise ValueError("Suma este negativa")
+    if tipreducere != None and tipreducere != 'silver' and tipreducere != ' gold':
+        raise ValueError("Nu exista acest tip de cheltuiala")
     for vanzare in lista:
         if getId(vanzare) == id:
             vanzarenoua = creeazaVanzare(id, titlu, gen, pret, tipreducere)
