@@ -24,10 +24,10 @@ def test_stergeVanzare():
     assert getById("1", lista) is None
     assert getById("2", lista) is not None
 
-    lista = stergeVanzare("3", lista)
+    lista = stergeVanzare("2", lista)
 
-    assert len(lista) == 1
-    assert getById("2", lista) is not None
+    assert len(lista) == 0
+    assert getById("2", lista) is None
 
 
 def test_modificaVanzare():
