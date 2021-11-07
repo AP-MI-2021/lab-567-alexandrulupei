@@ -3,7 +3,7 @@ from Domain.vanzarecarte import getTipreducere, creeazaVanzare, getId, getTitlu,
 
 def discount(lista):
     '''
-    Determina reducearea pretului unei vanzari
+    Determina reducerea pretului unei vanzari
     :param tipdiscount:
     :param lista:
     :return:

@@ -1,6 +1,6 @@
 from Domain.vanzarecarte import toString
 from Logic.CRUD import adaugareVanzare, stergeVanzare, modificaVanzare
-from Logic.functionalitati import discount
+from Logic.functionalitati import discount, modificaredupatitlu, pretminimgen, ordonaredupapret, titluridistinctedupagen
 
 
 def printMenu():
@@ -8,6 +8,10 @@ def printMenu():
     print("2. Stergere vanzare")
     print("3. Modificare vanzare")
     print("4. Aplicare discount")
+    print("5. Modifica genul unei carti dupa titlul acesteia")
+    print("6. Determinarea prețului minim pentru fiecare gen")
+    print("7. Ordonarea vânzărilor crescător după preț")
+    print("8.  Afișarea numărului de titluri distincte pentru fiecare gen")
     print("a. Afisare vanzari")
     print("x. Iesire")
 
@@ -44,6 +48,29 @@ def uiaplicarediscount(lista):
     return discount(lista)
 
 
+def uimodificaredupatitlu(lista):
+    titlu = input("Dati titlul vanzarii de modificat:")
+    gen = input("Dati noul gen")
+    return modificaredupatitlu(titlu, gen, lista)
+
+
+def uipretminimgen(lista):
+    rezultat = pretminimgen(lista)
+    for gen in rezultat:
+        print("Genul {} are pretul minim {}".format(gen, rezultat[gen]))
+
+
+def uiordonaredupapret(lista):
+    rezultat = ordonaredupapret(lista)
+    showAll(rezultat)
+
+
+def uititluridistinctedupagen(lista):
+    rezultat = titluridistinctedupagen(lista)
+    for gen in rezultat:
+        print("Genul {} are {} titluti distincte".format(gen, rezultat[gen]))
+
+
 def runMenu(lista):
     while True:
         printMenu()
@@ -57,9 +84,17 @@ def runMenu(lista):
             lista = uimodificaVanzare(lista)
         elif optiune == "4":
             lista = uiaplicarediscount(lista)
+        elif optiune == "5":
+            lista = uimodificaredupatitlu(lista)
+        elif optiune == "6":
+            uipretminimgen(lista)
+        elif optiune == "7":
+            uiordonaredupapret(lista)
+        elif optiune == "8":
+            uititluridistinctedupagen(lista)
         elif optiune == "a":
             showAll(lista)
         elif optiune == "x":
             break
         else:
-            print("Optiune gresita! Reincercati: ")
+            print("Optiune gresita! Reincercati:")
