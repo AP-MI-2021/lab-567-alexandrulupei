@@ -1,5 +1,5 @@
-from Domain.vanzarecarte import toString
-from Logic.CRUD import adaugareVanzare, stergeVanzare, modificaVanzare
+from Domain.vanzarecarte import toString, getGen, getTitlu, getPret, getTipreducere
+from Logic.CRUD import adaugareVanzare, stergeVanzare, modificaVanzare, getById
 from Logic.functionalitati import discount, modificaredupatitlu, pretminimgen, ordonaredupapret, titluridistinctedupagen
 
 
@@ -12,31 +12,58 @@ def printMenu():
     print("6. Determinarea prețului minim pentru fiecare gen")
     print("7. Ordonarea vânzărilor crescător după preț")
     print("8.  Afișarea numărului de titluri distincte pentru fiecare gen")
+    print("u. Undo")
+    print("r. Redo")
     print("a. Afisare vanzari")
     print("x. Iesire")
 
 
-def uiadaugavanzare(lista):
-    id = input("Dati id-ul: ")
-    titlu = input("Dati titlul: ")
-    gen = input("Dati genul: ")
-    pret = float(input('Dati pretul: '))
-    tipdiscount = input("Dati nr. de tipdiscount: ")
-    return adaugareVanzare(id, titlu, gen, pret, tipdiscount, lista)
+def uiadaugavanzare(lista, undoList, redoList):
+    try:
+        id = input("Dati id-ul: ")
+        titlu = input("Dati titlul: ")
+        gen = input("Dati genul: ")
+        pret = float(input('Dati pretul: '))
+        tipdiscount = input("Dati nr. de tipdiscount: ")
+
+        rezultat = adaugareVanzare(id, titlu, gen, pret, tipdiscount, lista)
+        undoList.append(lista)
+        redoList.clear()
+        return rezultat
+    except ValueError as ve:
+        print("Eroare: {}".format(ve))
+        return lista
 
 
-def uistergevanzare(lista):
-    id = input("Dati id-ul prajiturii de sters: ")
-    return stergeVanzare(id, lista)
+def uistergevanzare(lista, undoList, redoList):
+    try:
+        id = input("Dati id-ul vanzarii de sters: ")
+
+        rezultat = stergeVanzare(id, lista)
+        undoList.append(lista)
+        redoList.clear()
+        return rezultat
+    except ValueError as ve:
+        print("Eroare: {}".format(ve))
+        return lista
 
 
-def uimodificaVanzare(lista):
-    id = input("Dati id-ul: ")
-    titlu = input("Dati titlul: ")
-    gen = input("Dati genul: ")
-    pret = float(input('Dati pretul: '))
-    tipdiscount = input("Dati nr. de tipdiscount: ")
-    return modificaVanzare(id, titlu, gen, pret, tipdiscount, lista)
+def uimodificaVanzare(lista, undoList, redoList):
+    try:
+        id = input("Dati id-ul: ")
+        titlu = input("Dati titlul: ")
+        gen = input("Dati genul: ")
+        pret = float(input('Dati pretul: '))
+        tipdiscount = input("Dati nr. de tipdiscount: ")
+
+        rezultat = modificaVanzare(id, titlu, gen, pret, tipdiscount, lista)
+        undoList.append(lista)
+        redoList.clear()
+        return rezultat
+
+    except ValueError as ve:
+        print("Eroare: {}".format(ve))
+        return lista
 
 
 def showAll(lista):
@@ -45,43 +72,65 @@ def showAll(lista):
 
 
 def uiaplicarediscount(lista):
-    return discount(lista)
+    try:
+        return discount(lista)
+    except ValueError as ve:
+        print("Eroare: {}".format(ve))
+        return lista
 
 
 def uimodificaredupatitlu(lista):
-    titlu = input("Dati titlul vanzarii de modificat:")
-    gen = input("Dati noul gen")
-    return modificaredupatitlu(titlu, gen, lista)
+    try:
+        titlu = input("Dati titlul vanzarii de modificat:")
+        gen = input("Dati noul gen")
+        return modificaredupatitlu(titlu, gen, lista)
+    except ValueError as ve:
+        print("Eroare: {}".format(ve))
+        return lista
 
 
 def uipretminimgen(lista):
-    rezultat = pretminimgen(lista)
-    for gen in rezultat:
-        print("Genul {} are pretul minim {}".format(gen, rezultat[gen]))
+    try:
+        rezultat = pretminimgen(lista)
+        for gen in rezultat:
+            print("Genul {} are pretul minim {}".format(gen, rezultat[gen]))
+    except ValueError as ve:
+        print("Eroare: {}".format(ve))
+        return lista
 
 
 def uiordonaredupapret(lista):
-    rezultat = ordonaredupapret(lista)
-    showAll(rezultat)
+    try:
+        rezultat = ordonaredupapret(lista)
+        showAll(rezultat)
+    except ValueError as ve:
+        print("Eroare: {}".format(ve))
+        return lista
 
 
 def uititluridistinctedupagen(lista):
-    rezultat = titluridistinctedupagen(lista)
-    for gen in rezultat:
-        print("Genul {} are {} titluti distincte".format(gen, rezultat[gen]))
+    try:
+        rezultat = titluridistinctedupagen(lista)
+        for gen in rezultat:
+            print("Genul {} are {} titluti distincte".format(gen, rezultat[gen]))
+    except ValueError as ve:
+        print("Eroare: {}".format(ve))
+        return lista
 
 
 def runMenu(lista):
+    undoList = []
+    redoList = []
     while True:
         printMenu()
         optiune = input("Dati optiunea: ")
 
         if optiune == "1":
-            lista = uiadaugavanzare(lista)
+            lista = uiadaugavanzare(lista, undoList, redoList)
         elif optiune == "2":
-            lista = uistergevanzare(lista)
+            lista = uistergevanzare(lista, undoList, redoList)
         elif optiune == "3":
-            lista = uimodificaVanzare(lista)
+            lista = uimodificaVanzare(lista, undoList, redoList)
         elif optiune == "4":
             lista = uiaplicarediscount(lista)
         elif optiune == "5":
@@ -92,6 +141,18 @@ def runMenu(lista):
             uiordonaredupapret(lista)
         elif optiune == "8":
             uititluridistinctedupagen(lista)
+        elif optiune == "u":
+            if len(undoList) > 0:
+                redoList.append(lista)
+                lista = undoList.pop()
+            else:
+                print("Nu se poate face undo!")
+        elif optiune == "r":
+            if len(redoList) > 0:
+                undoList.append(lista)
+                lista = redoList.pop()
+            else:
+                print("Nu se poate face redo!")
         elif optiune == "a":
             showAll(lista)
         elif optiune == "x":
