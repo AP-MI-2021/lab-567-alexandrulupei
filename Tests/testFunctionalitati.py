@@ -61,3 +61,115 @@ def test_titluridistinctedupagen():
     assert len(rezultat) == 2
     assert rezultat["mare"] == 2
     assert rezultat["drama"] == 1
+
+def test_undo_redo():
+    undoList = []
+    redoList = []
+    lista = []
+
+    lista = adaugareVanzare("1", "Moarte pe nil", "mare", 150, "gold", lista)
+    assert len(lista) == 1
+    undoList.append(lista)
+
+    lista = adaugareVanzare("2", "ABC", "drama", 100, "silver", lista)
+    assert len(lista) == 2
+    undoList.append(lista)
+
+    lista = adaugareVanzare("3", "AC", "mare", 1000, "silver", lista)
+    undoList.append(lista)
+    assert len(lista) == 3
+
+
+
+    assert len(undoList) == 3
+    redoList.append(lista)
+    lista = undoList.pop()
+    print(lista)
+    assert len(undoList) == 2
+
+    redoList.append(lista)
+    lista = undoList.pop()
+    assert len(undoList) == 1
+
+    redoList.append(lista)
+    lista = undoList.pop()
+    assert len(undoList) == 0
+    assert len(redoList) == 3
+
+    redoList = []
+    lista.clear()
+    lista = adaugareVanzare("1", "Moarte pe nil", "mare", 150, "gold", lista)
+    assert len(lista) == 1
+    undoList.append(lista)
+    redoList.clear()
+
+    lista = adaugareVanzare("2", "ABC", "drama", 100, "silver", lista)
+    assert len(lista) == 2
+    undoList.append(lista)
+    redoList.clear()
+
+    lista = adaugareVanzare("4", "ACc", "marec", 1000, "silver", lista)
+    undoList.append(lista)
+    redoList.clear()
+    assert len(redoList) == 0
+    assert len(undoList) == 3
+
+    undoList.pop()
+    redoList.append(lista)
+
+    assert len(redoList) == 1
+    assert len(undoList) == 2
+
+    undoList.pop()
+    redoList.append(lista)
+
+    assert len(redoList) == 2
+    assert len(undoList) == 1
+
+    redoList.pop()
+    undoList.append(lista)
+
+    assert len(redoList) == 1
+    assert len(undoList) == 2
+
+    redoList.pop()
+    undoList.append(lista)
+
+    assert len(redoList) == 0
+    assert len(undoList) == 3
+
+    undoList.pop()
+    redoList.append(lista)
+
+    assert len(redoList) == 1
+    assert len(undoList) == 2
+
+    lista = adaugareVanzare("5", "A4C", "mar4e", 1000, "silver", lista)
+    undoList.pop()
+    redoList.append(lista)
+
+    assert len(redoList) == 2
+    assert len(undoList) == 1
+
+    undoList.pop()
+    redoList.append(lista)
+
+    assert len(redoList) == 3
+    assert len(undoList) == 0
+
+
+    redoList.pop()
+    undoList.append(lista)
+
+    assert len(redoList) == 2
+    assert len(undoList) == 1
+
+    redoList.pop()
+    undoList.append(lista)
+
+    assert len(redoList) == 1
+    assert len(undoList) == 2
+
+    if len(redoList) > 0:
+        redoList.pop()
+    assert len(redoList) == 0

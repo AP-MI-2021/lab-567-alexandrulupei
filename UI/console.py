@@ -63,7 +63,7 @@ def uimodificaVanzare(lista, undoList, redoList):
 
     except ValueError as ve:
         print("Eroare: {}".format(ve))
-        return lista
+
 
 
 def showAll(lista):
@@ -71,9 +71,12 @@ def showAll(lista):
         print(toString(vanzare))
 
 
-def uiaplicarediscount(lista):
+def uiaplicarediscount(lista, undoList, redoList):
     try:
-        return discount(lista)
+        rezultat = discount(lista)
+        undoList.append(lista)
+        redoList.clear()
+        return rezultat
     except ValueError as ve:
         print("Eroare: {}".format(ve))
         return lista
@@ -84,9 +87,10 @@ def uimodificaredupatitlu(lista):
         titlu = input("Dati titlul vanzarii de modificat:")
         gen = input("Dati noul gen")
         return modificaredupatitlu(titlu, gen, lista)
+
     except ValueError as ve:
         print("Eroare: {}".format(ve))
-        return lista
+
 
 
 def uipretminimgen(lista):
@@ -94,21 +98,23 @@ def uipretminimgen(lista):
         rezultat = pretminimgen(lista)
         for gen in rezultat:
             print("Genul {} are pretul minim {}".format(gen, rezultat[gen]))
+
     except ValueError as ve:
         print("Eroare: {}".format(ve))
-        return lista
+
 
 
 def uiordonaredupapret(lista):
     try:
         rezultat = ordonaredupapret(lista)
         showAll(rezultat)
+
     except ValueError as ve:
         print("Eroare: {}".format(ve))
         return lista
 
 
-def uititluridistinctedupagen(lista):
+def uititluridistinctedupagen(lista, ):
     try:
         rezultat = titluridistinctedupagen(lista)
         for gen in rezultat:
@@ -132,7 +138,7 @@ def runMenu(lista):
         elif optiune == "3":
             lista = uimodificaVanzare(lista, undoList, redoList)
         elif optiune == "4":
-            lista = uiaplicarediscount(lista)
+            lista = uiaplicarediscount(lista, undoList, redoList)
         elif optiune == "5":
             lista = uimodificaredupatitlu(lista)
         elif optiune == "6":
